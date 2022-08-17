@@ -1,0 +1,427 @@
+/*================================================
+=      general.js - 25/11/2020 - 13:45            =
+================================================*/
+$(document).ready(function () {
+    /*setTimeout(function(){ showBannerAPP(); }, 4000);
+    $('.riu-app-notification-close').click( function(e) {
+      e.preventDefault(); 
+      $('#riu-app-notification').removeClass("show");
+      $('body').removeClass('show-notif-app');
+      return false; 
+    });*/
+    /*=====================================
+    =      top-bar en el menu lateral     =
+    =====================================*/
+    var vHtml = '<div class="menu-lateral_bottom">' + $('.top-bar').html() + '</div>';
+    $('.menu-lateral').append(vHtml);
+    /* setTimeout(function(){
+       $('.menu-lateral').append(vHtml);
+     }, 2000);*/
+    /*=====================================
+    =  FIN top-bar en el menu lateral     =
+    =====================================*/
+    /*========================================
+    =            video background            =
+    ========================================*/
+    /*scaleVideoContainer();
+    initBannerVideoSize('.video-container .poster img');
+    initBannerVideoSize('.video-container .filter');
+    initBannerVideoSize('.video-container video');
+    $(window).on('resize', function() {
+      scaleVideoContainer();
+      scaleBannerVideoSize('.video-container .poster img');
+      scaleBannerVideoSize('.video-container .filter');
+      scaleBannerVideoSize('.video-container video');
+    });*/
+    /*=====  End of video background  ======*/
+    sidebarPosition();
+    // jQuery mode
+    if (window.devicePixelRatio > 1) {
+        $('body').addClass('retina');
+    }
+    // Only javascript mode
+    if (window.devicePixelRatio > 1) {
+        var elHtml = document.getElementsByTagName('html')[0];
+        var atrClass = elHtml.getAttribute('class');
+        atrClass = atrClass + ' retina';
+        elHtml.setAttribute('class', atrClass); //For Most Browsers
+        //elHtml.setAttribute('className', atrClass); //For IE; harmless to other brow
+    }
+    /*========================================
+    =            Go to Top Button            =
+    ========================================*/
+    // browser window scroll (in pixels) after which the "back to top" link is shown
+    var offset = 300,
+        //browser window scroll (in pixels) after which the "back to top" link opacity is reduced
+        offset_opacity = 310,
+        //duration of the top scrolling animation (in ms)
+        scroll_top_duration = 700,
+        //grab the "back to top" link
+        $back_to_top = $('.riu-top');
+    //hide or show the "back to top" link
+    $(window).scroll(function () {
+        ($(this).scrollTop() > offset) ? $back_to_top.addClass('riu-top-is-visible') : $back_to_top.removeClass('riu-top-is-visible riu-top-fade-out');
+        if ($(this).scrollTop() > offset_opacity) {
+            $back_to_top.addClass('riu-top-fade-out');
+        }
+    });
+    //smooth scroll to top
+    $back_to_top.on('click', function (event) {
+        event.preventDefault();
+        $('body,html').animate({
+            scrollTop: 0,
+        }, scroll_top_duration
+        );
+    });
+    /*=====  End of Go to Top Button  ======*/
+    /*
+        $('.destination-grid').masonry({
+            columnWidth: '.grid-sizer',
+            itemSelector: '.grid-item',
+            percentPosition: true,
+            transitionDuration: '0.2s',
+            //gutter: 10
+        });
+    */
+    //$(".player").mb_YTPlayer();
+    //$('.carousel').carousel({
+    //  interval: 900,
+    //});
+    $('[data-toggle="tooltip"]').tooltip();
+    $(".navbar-toggle").on("click", function () {
+        $('body').toggleClass('menu-open');
+        $('.menu-backdrop').toggleClass('in');
+        $(this).toggleClass("active");
+        $("#navbar").toggleClass("small-screen-active");
+    });
+    $(".menu-backdrop").on("click", function () {
+        $('body').toggleClass('menu-open');
+        $('.menu-backdrop').toggleClass('in');
+        $(".navbar-toggle").toggleClass("active");
+        $("#navbar").toggleClass("small-screen-active");
+    });
+    $(".close-sidebar").on("click", function () {
+        $('body').toggleClass('menu-open');
+        $('.menu-backdrop').toggleClass('in');
+        $(".navbar-toggle").toggleClass("active");
+        $("#navbar").toggleClass("small-screen-active");
+    });
+    $('li.dropdown a').on('click', function () {
+        $(this).parent().toggleClass('open');
+        $('li.dropdown a').not(this).parent().removeClass('open');
+        $('li.dropdown.login a').not(this).parent().parent().removeClass('open');
+        $('li.dropdown.agents a').not(this).parent().parent().removeClass('open');
+    });
+    $('body').on('click', function (e) {
+        if (!$('li.dropdown').is(e.target) && $('li.dropdown').has(e.target).length === 0 && $('.open').has(e.target).length === 0) {
+            $('li.dropdown').removeClass('open');
+        }
+    });
+});
+$(document).mouseup(function (e) {
+    var container_hotels = $(".hotels-box");
+    var container_destination = $(".destination-box");
+    var container_mix = $(".buscador-mix-box");
+    var container_guests = $(".guest-box");
+    var container_promocodes = $(".mostrar-promocode");
+    if (!container_hotels.is(e.target) // if the target of the click isn't the container_hotels...
+        && container_hotels.has(e.target).length === 0) { // ... nor a descendant of the container_hotels
+        container_hotels.removeClass('open');
+    }
+    if (!container_destination.is(e.target) // if the target of the click isn't the container_destination...
+        && container_destination.has(e.target).length === 0) { // ... nor a descendant of the container_destination
+        container_destination.removeClass('open');
+    }
+    if (!container_mix.is(e.target) // if the target of the click isn't the container_mix...
+        && container_mix.has(e.target).length === 0) { // ... nor a descendant of the container_mix
+        container_mix.removeClass('open');
+    }
+    if (!container_guests.is(e.target) // if the target of the click isn't the container_guests...
+        && container_guests.has(e.target).length === 0) { // ... nor a descendant of the container_guests
+        container_guests.removeClass('open');
+    }
+    if (!container_promocodes.is(e.target) // if the target of the click isn't the container_guests...
+        && container_promocodes.has(e.target).length === 0) { // ... nor a descendant of the container_guests
+        container_promocodes.removeClass('open');
+    }
+});
+$(document).on('touchend', function (e) {
+    var container_hotels = $(".hotels-box");
+    var container_destination = $(".destination-box");
+    var container_mix = $(".buscador-mix-box");
+    var container_guests = $(".guest-box");
+    var container_promocodes = $(".mostrar-promocode");
+    if (!container_hotels.is(e.target) // if the target of the click isn't the container_hotels...
+        && container_hotels.has(e.target).length === 0) { // ... nor a descendant of the container_hotels
+        container_hotels.removeClass('open');
+        $(".buscador-hoteles").blur();
+    }
+    if (!container_destination.is(e.target) // if the target of the click isn't the container_destination...
+        && container_destination.has(e.target).length === 0) { // ... nor a descendant of the container_destination
+        container_destination.removeClass('open');
+    }
+    if (!container_mix.is(e.target) // if the target of the click isn't the container_mix...
+        && container_mix.has(e.target).length === 0) { // ... nor a descendant of the container_mix
+        container_mix.removeClass('open');
+        $(".listHotels input").blur();
+    }
+    if (!container_guests.is(e.target) // if the target of the click isn't the container_guests...
+        && container_guests.has(e.target).length === 0) { // ... nor a descendant of the container_guests
+        container_guests.removeClass('open');
+    }
+    if (!container_promocodes.is(e.target) // if the target of the click isn't the container_guests...
+        && container_promocodes.has(e.target).length === 0) { // ... nor a descendant of the container_guests
+        container_promocodes.removeClass('open');
+    }
+});
+/*function showBannerAPP() {
+    $('body').addClass('show-notif-app');
+    $('#riu-app-notification').addClass("show");
+};*/
+function mostrarSelectorDestino() {
+    $(".destination-box").addClass('open');
+}
+function ocultarSelectorDestino() {
+    $(".destinos-list a").click(function () {
+        $(".destination-box").removeClass('open');
+    });
+}
+function mostrarSelectorMix() {
+    $(".buscador-mix-box").addClass('open');
+}
+function ocultarSelectorMix() {
+    $("#buscador-mix .hoteles-list a").click(function () {
+        $(".buscador-mix-box").removeClass('open');
+    });
+}
+function mostrarPromocode() {
+    $(".mostrar-promocode").addClass('open');
+}
+function ocultarPromocode() {
+    $(".form-group .promocode").click(function () {
+        $(".mostrar-promocode").removeClass('open');
+    });
+}
+function mostrarSelectorHuespedes(buscador) {
+    $("#huespedes" + buscador).addClass('open');
+}
+function ocultarSelectorHuespedes() {
+    $(".form-group .guest-box a").click(function () {
+        $(".guest-box").removeClass('open');
+    });
+}
+function dropdownLogin() {
+    $('li.dropdown.login a').on('click', function () {
+        $(this).parent().parent().toggleClass('open');
+        $('li.dropdown a').not(this).parent().removeClass('open');
+        $('li.dropdown.login a').not(this).parent().removeClass('open');
+    });
+}
+function dropdownAgents() {
+    $('li.dropdown.agents a').on('click', function () {
+        $(this).parent().parent().toggleClass('open');
+        $('li.dropdown a').not(this).parent().removeClass('open');
+        $('li.dropdown.agents a').not(this).parent().removeClass('open');
+    });
+}
+$(window).load(function () {
+    setTimeout(dropdownLogin, 500);
+    setTimeout(dropdownAgents, 500);
+});
+/*$(document).mouseup(function (e) {
+    var panelContainer = $(".riu-panel-container");
+    var modalOpended = $(".mfp-zoom-out-cur");
+    var modalBoostrap = $(".modal");
+    if ( 
+        (!modalOpended.is(e.target) && modalOpended.has(e.target).length === 0) 
+        && (!modalBoostrap.is(e.target) && modalBoostrap.has(e.target).length === 0) 
+        ) { 
+        if (!panelContainer.is(e.target) // if the target of the click isn't the container...
+            && panelContainer.has(e.target).length === 0) { // ... nor a descendant of the container
+            panelContainer.parent().removeClass('is-visible');
+            $('body').removeClass('modal-open');
+        }
+    }
+});*/
+/*function showPanel() {
+    $('body').toggleClass('modal-open');
+    $('.riu-panel').toggleClass('is-visible');
+    $('.riu-panel-close').click(function(e) {
+        // Act on the event 
+        $(".riu-panel").removeClass('is-visible');
+        $('body').removeClass('modal-open');
+    });
+}*/
+function sidebarPosition() {
+    var window_top = $(window).scrollTop();
+    var targetOffset = $("#end-fixed").offset() ? $('#end-fixed').offset().top : '';
+    var heightSidebar = $(".sidebar-wrap .sidebar").outerHeight();
+    $("#end-fixed").css("top", -heightSidebar);
+    if (window_top > targetOffset) {
+        $('.sidebar-wrap').addClass('sidebar-stick-bottom');
+    } else {
+        $('.sidebar-wrap').removeClass('sidebar-stick-bottom');
+    }
+}
+function sticky_relocate() {
+    // console.info("resizeeee");
+    var window_top = $(window).scrollTop();
+    var div_top = $('#sticky-anchor').offset() ? $('#sticky-anchor').offset().top : '';
+    var targetOffset = $("#end-fixed").offset() ? $('#end-fixed').offset().top : '';
+    var sidebar = $('#sticky-sidebar').offset() ? $('#sticky-sidebar').offset().top : '';
+    var heightSidebar = $(".sidebar-wrap .sidebar").outerHeight();
+    $("#end-fixed").css("top", -heightSidebar);
+    /* fixed finalizar reserva */
+    var summary = $('#sticky-summary').offset() ? $('#sticky-summary').offset().top : '';
+    var heightFixed = $(".fixed-scroll").outerHeight();
+    var maxHeightScroll = window_top + heightFixed;
+    var end_fixed = $('#end-fixed-summary').offset() ? $('#end-fixed-summary').offset().top : '';
+    var minToFix = window.innerHeight - heightFixed;
+    // $( "#end-fixed" ).css("top", heightSummary);
+    if (minToFix >= '0') {
+        if (window_top > summary) {
+            $('.fixed-scroll').addClass('fixed-active');
+        } else {
+            $('.fixed-scroll').removeClass('fixed-active');
+        }
+        if (maxHeightScroll >= end_fixed) {
+            $('.reservation-summary-wrap').addClass('fixed-bottom');
+        } else {
+            $('.reservation-summary-wrap').removeClass('fixed-bottom');
+        }
+    } else {
+        $('.fixed-scroll').removeClass('fixed-active');
+        $('.reservation-summary-wrap').removeClass('fixed-bottom');
+    }
+    /* fixed finalizar reserva */
+    /* fixed summary reserva V2 */
+    var summary = $('#sticky-summary').offset() ? $('#sticky-summary').offset().top : '';
+    var heightFixed = $(".summary-v2").outerHeight();
+    var maxHeightScroll = window_top + heightFixed;
+    var end_fixed = $('#end-fixed-summary').offset() ? $('#end-fixed-summary').offset().top : '';
+    var minToFix = window.innerHeight - heightFixed;
+    // $( "#end-fixed" ).css("top", heightSummary);
+    // console.log("summary " + summary);
+    // console.log("heightFixed " + heightFixed);
+    // console.info("window-top " + window_top);
+    // console.info("maxHeightScroll " + maxHeightScroll);
+    // console.info(window.innerHeight - heightFixed);
+    // if (window.innerHeight > '699') {
+    if (minToFix >= '0') {
+        if (window_top >= summary) {
+            $('.summary-v2').addClass('fixed-active');
+        } else {
+            $('.summary-v2').removeClass('fixed-active');
+        }
+        if (maxHeightScroll >= end_fixed) {
+            $('.reservation-summary-wrap').addClass('fixed-bottom');
+        } else {
+            $('.reservation-summary-wrap').removeClass('fixed-bottom');
+        }
+    } else {
+        $('.summary-v2').removeClass('fixed-active');
+        $('.reservation-summary-wrap').removeClass('fixed-bottom');
+    }
+    /* fin fixed summary reserva V2 */
+    var endReservation = $("#end-reservation").offset() ? $('#end-reservation').offset().top : '';
+    // console.info("window-top " + window_top);
+    // console.info("summary " + summary);
+    // console.info("fixed " + heightFixed);
+    // console.info("div-top " + div_top);
+    // console.info("targetOffset " + targetOffset);
+    // console.info("end-fixed " + end_fixed);
+    // console.info("maxHeightScroll " + maxHeightScroll);
+    if (window_top > div_top) {
+        $('body').addClass('stick');
+        $('#search-form').addClass('stick');
+        $('#menu-hotel').addClass('stick');
+        $('#menu-destino').addClass('stick');
+        $('#menu-prensa').addClass('stick');
+        $('#menu-sostenibilidad').addClass('stick');
+    } else {
+        $('body').removeClass('stick');
+        $('#search-form').removeClass('stick');
+        $('#menu-hotel').removeClass('stick');
+        $('#menu-destino').removeClass('stick');
+        $('#menu-prensa').removeClass('stick');
+        $('#menu-sostenibilidad').removeClass('stick');
+    }
+    if (window_top > sidebar) {
+        $('.sidebar-wrap').addClass('sidebar-stick');
+    } else {
+        $('.sidebar-wrap').removeClass('sidebar-stick');
+    }
+    if (window_top > targetOffset) {
+        $('.sidebar-wrap').addClass('sidebar-stick-bottom');
+    } else {
+        $('.sidebar-wrap').removeClass('sidebar-stick-bottom');
+    }
+    if (window_top > endReservation) {
+        $('.reservation-actions-wrap').addClass('visible');
+    } else {
+        $('.reservation-actions-wrap').removeClass('visible');
+    }
+}
+$(function () {
+    $(window).scroll(sticky_relocate);
+    $(window).resize(sticky_relocate);
+    sticky_relocate();
+});
+function animate(x) {
+    $('#like-hotel-wrap').removeClass().addClass(x + ' animated').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function () {
+        $(this).removeClass();
+    });
+};
+function scrollPageTo(element) {
+    var element = $(element);
+    $('html,body').animate({ scrollTop: element.offset().top }, 'slow');
+}
+function toTop() {
+    $('body, html').animate({ scrollTop: 0 }, 750);
+};
+$.fn.extend({
+    animateCss: function (animationName) {
+        var animationEnd = 'webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend';
+        this.addClass('animated ' + animationName).one(animationEnd, function () {
+            $(this).removeClass('animated ' + animationName);
+        });
+    }
+});
+/*========================================
+=            video background            =
+========================================*/
+/*
+  function scaleVideoContainer() {
+    var height = $(window).height() + 5;
+    var unitHeight = parseInt(height) + 'px';
+    $('.homepage-hero-module').css('height',unitHeight);
+    $('.homepage-hero-module').css('height',unitHeight);
+  }
+  function initBannerVideoSize(element){
+    $(element).each(function(){
+      $(this).data('height', $(this).height());
+      $(this).data('width', $(this).width());
+    });
+    scaleBannerVideoSize(element);
+  }
+  function scaleBannerVideoSize(element) {
+    var windowWidth = $(window).width(),
+    windowHeight = $(window).height() + 5,
+    videoWidth,
+    videoHeight;
+    // console.log(windowHeight);
+    $(element).each(function(){
+      var videoAspectRatio = $(this).data('height')/$(this).data('width');
+      $(this).width(windowWidth);
+      if(windowWidth < 1000){
+          videoHeight = windowHeight;
+          videoWidth = videoHeight / videoAspectRatio;
+          $(this).css({'margin-top' : 0, 'margin-left' : -(videoWidth - windowWidth) / 2 + 'px'});
+          $(this).width(videoWidth).height(videoHeight);
+      }
+      $('.homepage-hero-module .video-container video').addClass('fadeIn animated');
+    });
+  }
+*/
+/*=====  End of video background  ======*/
+

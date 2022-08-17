@@ -1,0 +1,665 @@
+if (!window.luceAnalytics) {
+    window.luceAnalytics = (function () {
+        const _jsVersion = "1.6.0";
+        const _modelVersion = "1.5.0";
+        /*** Event message definitions ***/
+        class PageViewEvent {
+            constructor() {
+                this.sig1 = "navigation";
+                this.sig2 = "web";
+                this.sig3 = "pageView";
+                this.dim1 = modelRetriever.getURL();
+                this.dim2 = modelRetriever.getReferer();
+                this.met1 = modelRetriever.getPageScroll();
+                this.meta1 = modelRetriever.getLoadTimestamp();
+                this.meta2 = modelRetriever.getJSVersion();
+                this.meta3 = modelRetriever.getModelVersion();
+                this.meta4 = modelRetriever.getSessionID();
+                this.meta5 = modelRetriever.getUserID();
+                this.meta6 = modelRetriever.getCookies();
+                this.meta9 = modelRetriever.getUserAgent();
+                this.meta10 = modelRetriever.getScreenDimensions();
+                this.meta11 = modelRetriever.getCountry();
+                this.meta12 = modelRetriever.getRegion();
+                this.meta13 = modelRetriever.getTimezoneOffset();
+                this.meta14 = modelRetriever.getNavigationStart();
+                this.meta15 = modelRetriever.getRedirectEnd();
+                this.meta16 = modelRetriever.getRedirectStart();
+                this.meta17 = modelRetriever.getFetchStart();
+                this.meta18 = modelRetriever.getDomainLookupEnd();
+                this.meta19 = modelRetriever.getDomainLookupStart();
+                this.meta20 = modelRetriever.getConnectEnd();
+                this.meta21 = modelRetriever.getConnectStart();
+                this.meta22 = modelRetriever.getSecureConnectionStart();
+                this.meta23 = modelRetriever.getRequestStart();
+                this.meta24 = modelRetriever.getResponseEnd();
+                this.meta25 = modelRetriever.getResponseStart();
+                this.meta26 = modelRetriever.getDomComplete();
+                this.meta27 = modelRetriever.getDomContentLoadedEventEnd();
+                this.meta28 = modelRetriever.getDomContentLoadedEventStart();
+                this.meta29 = modelRetriever.getDomInteractive();
+                this.meta30 = modelRetriever.getDomLoading();
+                this.meta31 = modelRetriever.getLoadEventEnd();
+                this.meta32 = modelRetriever.getLoadEventStart();
+            }
+        }
+        class ClickEvent{
+            constructor(id, value) {
+                this.sig1 = "navigation";
+                this.sig2 = "web";
+                this.sig3 = "click";
+                this.dim1 = modelRetriever.getURL();
+                this.dim2 = id;
+                this.dim3 = value;
+                this.met1 = modelRetriever.getPageScroll();
+                this.meta1 = modelRetriever.getTimestamp();
+                this.meta2 = modelRetriever.getJSVersion();
+                this.meta3 = modelRetriever.getModelVersion();
+                this.meta4 = modelRetriever.getSessionID();
+                this.meta5 = modelRetriever.getUserID();
+                this.meta6 = modelRetriever.getCookies();
+                this.meta13 = modelRetriever.getTimezoneOffset();
+            }
+        }
+        class ClickEventForClickGroups{
+            constructor(id, value) {
+                this.url = modelRetriever.getURL();
+                this.id = id;
+                this.value = value;
+                this.pageScroll = modelRetriever.getPageScroll();
+                this.timeStamp = modelRetriever.getTimestamp();
+                this.cookies = modelRetriever.getCookies();
+            }
+        }
+        class ClicksGroupEvent {
+            constructor() {
+                this.sig1 = "navigation";
+                this.sig2 = "web";
+                this.sig3 = "clicksGroup";
+                this.dim1 = modelRetriever.getURLGroup();
+                this.dim2 = modelRetriever.getIDsGroup();
+                this.dim3 = modelRetriever.getValuesGroup();
+                this.met1 = modelRetriever.getPageScrollGroup();
+                this.met2 = modelRetriever.getNumClicks();
+                this.meta1 = modelRetriever.getTimestampGroup();
+                this.meta2 = modelRetriever.getJSVersion();
+                this.meta3 = modelRetriever.getModelVersion();
+                this.meta4 = modelRetriever.getSessionID();
+                this.meta5 = modelRetriever.getUserID();
+                this.meta6 = modelRetriever.getCookiesLastClick();
+                this.meta13 = modelRetriever.getTimezoneOffset();
+            }
+        }
+        class ChangeEvent {
+            constructor(id, value) {
+                this.sig1 = "navigation";
+                this.sig2 = "web";
+                this.sig3 = "change";
+                this.dim1 = modelRetriever.getURL();
+                this.dim2 = id;
+                this.dim3 = value;
+                this.met1 = modelRetriever.getPageScroll();
+                this.meta1 = modelRetriever.getTimestamp();
+                this.meta2 = modelRetriever.getJSVersion();
+                this.meta3 = modelRetriever.getModelVersion();
+                this.meta4 = modelRetriever.getSessionID();
+                this.meta5 = modelRetriever.getUserID();
+                this.meta6 = modelRetriever.getCookies();
+                this.meta13 = modelRetriever.getTimezoneOffset();
+            }
+        }
+        class UnloadEvent {
+            constructor() {
+                this.sig1 = "navigation";
+                this.sig2 = "web";
+                this.sig3 = "unload";
+                this.dim1 = modelRetriever.getURL();
+                this.met1 = modelRetriever.getTimeSpentOnPageMs();
+                this.met2 = modelRetriever.getPageScroll();
+                this.meta1 = modelRetriever.getTimestamp();
+                this.meta2 = modelRetriever.getJSVersion();
+                this.meta3 = modelRetriever.getModelVersion();
+                this.meta4 = modelRetriever.getSessionID();
+                this.meta5 = modelRetriever.getUserID();
+                this.meta6 = modelRetriever.getCookies();
+                this.meta13 = modelRetriever.getTimezoneOffset();
+                this.meta14 = modelRetriever.getUnloadEventEnd()
+                this.meta15 = modelRetriever.getUnloadEventStart();
+            }
+        }
+        class PrintEvent {
+            constructor() {
+                this.sig1 = "navigation";
+                this.sig2 = "web";
+                this.sig3 = "print";
+                this.dim1 = modelRetriever.getURL();
+                this.met2 = modelRetriever.getPageScroll();
+                this.meta1 = modelRetriever.getTimestamp();
+                this.meta2 = modelRetriever.getJSVersion();
+                this.meta3 = modelRetriever.getModelVersion();
+                this.meta4 = modelRetriever.getSessionID();
+                this.meta5 = modelRetriever.getUserID();
+                this.meta6 = modelRetriever.getCookies();
+                this.meta13 = modelRetriever.getTimezoneOffset();
+            }
+        }
+        class GenericEvent {
+            constructor(attributes) {
+                this.sig1 = "navigation";
+                this.sig2 = "web";
+                this.sig3 = attributes.sig3 || ""
+                this.sig4 = attributes.sig4 || ""
+                this.dim1 = attributes.dim1 || ""
+                this.dim2 = attributes.dim2 || ""
+                this.dim3 = attributes.dim3 || ""
+                this.dim4 = attributes.dim4 || ""
+                this.met1 = attributes.met1 || ""
+                this.met2 = attributes.met2 || ""
+                this.met3 = attributes.met3 || ""
+                this.met4 = attributes.met4 || ""
+                this.meta1 = modelRetriever.getTimestamp();
+                this.meta2 = modelRetriever.getJSVersion();;
+                this.meta3 = modelRetriever.getModelVersion();
+                this.meta4 = modelRetriever.getSessionID();
+                this.meta5 = modelRetriever.getUserID();
+                this.meta6 = modelRetriever.getCookies();
+                this.meta7 = attributes.meta7 || ""
+                this.meta8 = attributes.meta8 || ""
+                this.meta9 = attributes.meta9 || ""
+                this.meta10 = attributes.meta10 || ""
+                this.meta13 = modelRetriever.getTimezoneOffset();
+            }
+        }
+        var modelRetriever = (function () {
+            var _country, _region;
+            var _getURL = function () {
+                return document.URL;
+            }
+            var _getReferer = function () {
+                return document.referrer;
+            }
+            var _getCookies = function () {
+                return document.cookie;
+            }
+            var _getTimestamp = function () {
+                return new Date().getTime();
+            }
+            var _getLoadTimestamp = function () {
+                let loadTime = performance.timing.loadEventEnd;
+                // In case loadEvent has not finished yet
+                if (loadTime == 0) {
+                    loadTime = new Date().getTime();
+                }
+                return loadTime;
+            }
+            var _getSessionID = function () {
+                return utils.getCookie("JSESSIONID");
+            }
+            var _getUserID = function () {
+                return utils.getCookie("_ga");
+            }
+            var _getScreenDimensions = function () {
+                let width = window.screen.availHeight;
+                let height = window.screen.availWidth;
+                return "" + width + "x" + height;
+            }
+            var _getJSVersion = function () {
+                return _jsVersion;
+            }
+            var _getModelVersion = function () {
+                return _modelVersion;
+            }
+            var _getUserAgent = function () {
+                return navigator.userAgent;
+            }
+            var _getTimeSpentOnPageMs = function () {
+                return performance.now()
+            }
+            var _getPageScroll = function () {
+                return utils.getScrollPercent();
+            }
+            var _getCountry = function () {
+                return _country;
+            }
+            var _getRegion = function () {
+                return _region;
+            }
+            var _initialize = function () {
+                _country = "";
+                _region = "";
+            }
+            var _updateLocation = async () => {
+                var response = await fetch("https://www.riu.com");
+                _country = response.headers.get('x-riu-gp');
+                _region = response.headers.get('x-riu-gr');
+            }
+            var _getTimezoneOffset = function () {
+                return (new Date()).getTimezoneOffset();
+            }
+            var _getNavigationStart = function(){
+                return performance.timing.navigationStart;
+            }
+            var _getRedirectEnd = function(){
+                return performance.timing.redirectEnd;
+            }
+            var _getRedirectStart = function(){
+                return performance.timing.redirectStart;
+            }
+            var _getFetchStart = function(){
+                return performance.timing.fetchStart;
+            }
+            var _getDomainLookupEnd = function(){
+                return performance.timing.domainLookupEnd;
+            }
+            var _getDomainLookupStart = function(){
+                return performance.timing.domainLookupStart;
+            }
+            var _getConnectEnd= function(){
+                return performance.timing.connectEnd;
+            }
+            var _getConnectStart = function(){
+                return performance.timing.connectStart;
+            }
+            var _getSecureConnectionStart= function(){
+                return performance.timing.secureConnectionStart;
+            }
+            var _getRequestStart= function(){
+                return performance.timing.requestStart;
+            }
+            var _getResponseEnd = function(){
+                return performance.timing.responseEnd;
+            }
+            var _getResponseStart = function(){
+                return performance.timing.responseStart;
+            }
+            var _getDomComplete = function(){
+                return performance.timing.domComplete;
+            }
+            var _getDomContentLoadedEventEnd = function(){
+                return performance.timing.domContentLoadedEventEnd;
+            }
+            var _getDomContentLoadedEventStart = function(){
+                return performance.timing.domContentLoadedEventStart;
+            }
+            var _getDomInteractive = function(){
+                return performance.timing.domInteractive;
+            }
+            var _getDomLoading = function(){
+                return performance.timing.domLoading;
+            }
+            var _getLoadEventEnd = function(){
+                return performance.timing.loadEventEnd;
+            }
+            var _getLoadEventStart = function(){
+                return performance.timing.loadEventStart;
+            }
+            var _getUnloadEventEnd = function(){
+                return performance.timing.unloadEventEnd;
+            }
+            var _getUnloadEventStart = function(){
+                return performance.timing.unloadEventStart;
+            }
+            var _getURLGroup = function(){
+                return utils.concatPropertiesFromArray("url");
+            }
+            var _getIDsGroup = function(){
+                return utils.concatPropertiesFromArray("id");
+            }
+            var _getValuesGroup = function(){
+                return utils.concatPropertiesFromArray("value");
+            }
+            var _getPageScrollGroup = function(){
+                return utils.concatPropertiesFromArray("pageScroll");
+            }
+            var _getTimestampGroup = function(){
+                return utils.concatPropertiesFromArray("timeStamp");
+            }
+            var _getCookiesLastClick = function(){
+                return clicksGroup[clicksGroup.length-1]["cookies"];
+            }
+            var _getNumClicks = function(){
+                return clicksGroup.length;
+            }
+            return {
+                getURL: _getURL,
+                getReferer: _getReferer,
+                getCookies: _getCookies,
+                getTimestamp: _getTimestamp,
+                getLoadTimestamp: _getLoadTimestamp,
+                getSessionID: _getSessionID,
+                getUserID: _getUserID,
+                getScreenDimensions: _getScreenDimensions,
+                getJSVersion: _getJSVersion,
+                getModelVersion: _getModelVersion,
+                getUserAgent: _getUserAgent,
+                getTimeSpentOnPageMs: _getTimeSpentOnPageMs,
+                getPageScroll: _getPageScroll,
+                getRegion: _getRegion,
+                getCountry: _getCountry,
+                getTimezoneOffset: _getTimezoneOffset,
+                getNavigationStart: _getNavigationStart,
+                getRedirectEnd: _getRedirectEnd,
+                getRedirectStart: _getRedirectStart,
+                getFetchStart: _getFetchStart,
+                getDomainLookupEnd: _getDomainLookupEnd,
+                getDomainLookupStart: _getDomainLookupStart,
+                getConnectEnd: _getConnectEnd,
+                getConnectStart: _getConnectStart,
+                getSecureConnectionStart: _getSecureConnectionStart,
+                getRequestStart: _getRequestStart,
+                getResponseEnd: _getResponseEnd,
+                getResponseStart: _getResponseStart,
+                getDomComplete: _getDomComplete,
+                getDomContentLoadedEventEnd: _getDomContentLoadedEventEnd,
+                getDomContentLoadedEventStart: _getDomContentLoadedEventStart,
+                getDomInteractive: _getDomInteractive,
+                getDomLoading: _getDomLoading,
+                getLoadEventEnd: _getLoadEventEnd,
+                getLoadEventStart: _getLoadEventStart,
+                getUnloadEventEnd: _getUnloadEventEnd,
+                getUnloadEventStart: _getUnloadEventStart,
+                getURLGroup: _getURLGroup,
+                getIDsGroup: _getIDsGroup,
+                getValuesGroup: _getValuesGroup,
+                getPageScrollGroup: _getPageScrollGroup,
+                getTimestampGroup: _getTimestampGroup,
+                getCookiesLastClick: _getCookiesLastClick,
+                getNumClicks: _getNumClicks,
+                updateLocation: _updateLocation,
+                init: _initialize,
+            }
+        }())
+        var utils = (function () {
+            var createXPathFromElement = function (elm) {
+                var allNodes = document.getElementsByTagName('*');
+                for (var segs = []; elm && elm.nodeType == 1; elm = elm.parentNode) {
+                    if (elm.hasAttribute('id')) {
+                        var uniqueIdCount = 0;
+                        for (var n = 0; n < allNodes.length; n++) {
+                            if (allNodes[n].hasAttribute('id') && allNodes[n].id == elm.id) uniqueIdCount++;
+                            if (uniqueIdCount > 1) break;
+                        };
+                        if (uniqueIdCount == 1) {
+                            segs.unshift('id("' + elm.getAttribute('id') + '")');
+                            return segs.join('/');
+                        } else {
+                            segs.unshift(elm.localName.toLowerCase() + '[@id="' + elm.getAttribute('id') + '"]');
+                        }
+                    } else if (elm.hasAttribute('class')) {
+                        segs.unshift(elm.localName.toLowerCase() + '[@class="' + elm.getAttribute('class') + '"]');
+                    } else {
+                        for (i = 1, sib = elm.previousSibling; sib; sib = sib.previousSibling) {
+                            if (sib.localName == elm.localName) i++;
+                        };
+                        segs.unshift(elm.localName.toLowerCase() + '[' + i + ']');
+                    };
+                };
+                return segs.length ? '/' + segs.join('/') : null;
+            };
+            var getCookie = function (cookieName) {
+                var cookieValue = "";
+                if (document.cookie.indexOf(cookieName) > -1) {
+                    cookieValue = document.cookie.split(cookieName + "=")[1].split(";")[0];
+                }
+                return cookieValue
+            }
+            var getScrollPercent = function () {
+                var h = document.documentElement,
+                    b = document.body,
+                    st = 'scrollTop',
+                    sh = 'scrollHeight';
+                return (h[st] || b[st]) / ((h[sh] || b[sh]) - h.clientHeight) * 100;
+            }
+            var pruneEmptyStructs = function (message) {
+                if (typeof (message) !== "object") {
+                    return message;
+                }
+                else if (Object.keys(message).length == 0) {
+                    return undefined;
+                }
+                else {
+                    var cleanMessage = {};
+                    for (let key in message) {
+                        cleanMessage[key] = pruneEmptyStructs(message[key]);
+                    }
+                    return cleanMessage;
+                }
+            }
+            var concatPropertiesFromArray = function (prop){ //"prop" must be a string
+                var stringConcat = clicksGroup.map(elem => elem[prop], prop).join(";");
+                return stringConcat;
+            }
+            return {
+                createXPathFromElement,
+                getCookie,
+                getScrollPercent,
+                pruneEmptyStructs,
+                concatPropertiesFromArray
+            }
+        }());
+        var sendConfig = {};
+        var captureConfig = {};
+        var initialized = false;
+        var pageloadSent = false;
+        var clicksGroup = [];
+        var timer = {
+            id: 0,
+            activated: false
+        };
+        var _customEventHandlers = {};
+        var _sendMessage = function (message) {
+            window.fetch(sendConfig.eventsEndpoint, {
+                method: "POST",
+                body: JSON.stringify(utils.pruneEmptyStructs(message)),
+                mode: "cors",
+                keepalive: true,
+                cache: "no-store"
+            })
+        }
+        var _pushClick = function (clickEvent){
+            clicksGroup.push(clickEvent);
+        }
+        var _clearClicksGroup = function (){
+            clicksGroup = [];
+        }
+        var _setTimer = function (){
+            timer.id = setTimeout(_forceSendClicks,sendConfig.timeoutExpiration);
+            timer.activated=true;
+        }
+        var _stopTimer = function (){
+            clearTimeout(timer.id);
+            timer.activated=false;
+            timer.id=0;
+        }
+        var _forceSendClicks = function (){
+            var clicksGroupEvent = new ClicksGroupEvent()
+            _sendMessage(clicksGroupEvent);
+            _clearClicksGroup();
+            timer.id=0;
+            timer.activated=false;
+        }
+        var _handleBrowserEvent = function (ev) {
+            if (_customEventHandlers[ev.type] !== undefined) {
+                _customEventHandlers[ev.type].forEach(callback => {
+                    callback(ev);
+                });
+            }
+            switch (ev.type) {
+                case "load":
+                    _loadEventHandler(ev)
+                    break;
+                case "unload":
+                    _unloadEventHandler(ev)
+                    break;
+                case "click":
+                    _clickEventHandler(ev)
+                    break;
+                case "change":
+                    _changeEventHandler(ev)
+                    break;
+                case "print":
+                    _printEventHandler(ev)
+                    break;
+                default:
+                    break;
+            }
+        }
+        /*** Event Handlers ***/
+        var _loadEventHandler = async function (event) {
+            if (pageloadSent == true) { return; }
+            await modelRetriever.updateLocation();
+            var pageView = new PageViewEvent();
+            _sendMessage(pageView);
+            pageloadSent = true;
+        }
+        var _unloadEventHandler = function (event) {
+            var hit = new UnloadEvent()
+            _sendMessage(hit);
+            if (sendConfig.groupClicks==true){
+                if(timer.activated==true){
+                    var clicksGroupEvent = new ClicksGroupEvent()
+                    _sendMessage(clicksGroupEvent);
+                    _clearClicksGroup();
+                    _stopTimer();
+                }
+            }
+        }
+        var _clickEventHandler = function (event) {
+            var id = event.target.id;
+            if (id == "") {
+                id = utils.createXPathFromElement(event.target);
+            }
+            var value = event.target.value;
+            if (sendConfig.groupClicks==false){
+                var clickEvent = new ClickEvent(id, value)
+                _sendMessage(clickEvent);
+            }else if (sendConfig.groupClicks==true){
+                var clickEvent = new ClickEventForClickGroups(id, value)
+                _pushClick(clickEvent);
+                if (timer.activated==false){
+                    _setTimer();
+                }else if(timer.activated==true){
+                    _stopTimer();
+                    _setTimer();
+                }
+            }
+        }
+        var _changeEventHandler = function (event) {
+            var id = event.target.id;
+            if (id == "") {
+                id = utils.createXPathFromElement(event.target);
+            }
+            var value = event.target.value;
+            var clickEvent = new ChangeEvent(id, value)
+            _sendMessage(clickEvent);
+        }
+        var _printEventHandler = function (event) {
+            var print = new PrintEvent()
+            _sendMessage(print);
+        }
+        var _setListeners = function () {
+            var captureEvents = captureConfig.events;
+            captureEvents.forEach(eventName => {
+                window.addEventListener(eventName, _handleBrowserEvent);
+            });
+        }
+        var _checkPageLoaded = function () {
+            if (document.readyState = 'complete') {
+                _loadEventHandler();
+            }
+        }
+        var _init = function (config) {
+            if (initialized) {
+                console.log("Library already initialized");
+                return;
+            }
+            captureConfig = config.capture;
+            sendConfig = config.send;
+            modelRetriever.init();
+            _setListeners();
+            // Fire page load event if window.load fired before script load
+            _checkPageLoaded();
+            initialized = true;
+        }
+        /* PUBLIC FUNCTIONS
+        */
+        var _registerCustomEventHandler = function (browserEvent, callback) {
+            if (_customEventHandlers[browserEvent] === undefined) {
+                _customEventHandlers[browserEvent] = [];
+            }
+            if (_customEventHandlers[browserEvent].indexOf(callback) == -1) {
+                _customEventHandlers[browserEvent].push(callback);
+            }
+        }
+        var _logCustomEvent = function (attributes) {
+            var hit = new GenericEvent(attributes);
+            _sendMessage(hit);
+        }
+        /* Main interface - everything here will be public
+        */
+        var core = {
+            init: function (config) {
+                // Call real init function
+                _init(config);
+            },
+            isInitialized: function () {
+                return initialized;
+            },
+            registerCustomEventHandler: _registerCustomEventHandler,
+            utils: utils,
+            logCustomEvent: _logCustomEvent,
+        }
+        return core;
+    }());
+    /* Main Configuration
+    */
+  if (config_raw_pixel) window.luceAnalytics.init(config_raw_pixel);
+    else console.error('config_raw_pixel not found')
+}
+var dataLayerCheck = function () {
+    var sendFinishDispo = function (finishDispoData) {
+        luceAnalytics.logCustomEvent({
+            sig3: "dataLayer",
+            sig4: "finishDispo",
+            met1: finishDispoData.diasAntelacion,
+            met2: finishDispoData.numNoches,
+            met3: finishDispoData.numeroHab,
+            met4: finishDispoData.numeroAdultos,
+            met5: finishDispoData.numeroNiños,
+            met6: finishDispoData.numeroNiños,
+            met7: finishDispoData.numeroNiños,
+            met8: finishDispoData.numeroNiños,
+            meta7: finishDispoData.tipoPagina,
+            meta8: finishDispoData.tipoBusqueda,
+            dim1: finishDispoData.fechaEntrada,
+            dim2: finishDispoData.fechaSalida,
+            dim3: finishDispoData.idHotel,
+            dim4: finishDispoData.idUnicoPais,
+            dim5: finishDispoData.dispoOK,
+            dim6: finishDispoData.motivoDispoKO,
+        });
+        window.clearInterval(dataLayerCheckInterval);
+        return;
+    }
+    dataLayer.forEach(data => data.event == "finishDispo" ? sendFinishDispo(data) : null)
+}
+if (typeof dataLayerCheckInterval == 'undefined') {
+    var dataLayerCheckInterval = setInterval(dataLayerCheck, 1000)
+}
+// EXAMPLE OF REGISTERING CUSTOM EVENT HANDLERS FROM OTHER SCRIPTS
+// SEARCH EVENT
+// Registers load events in the search url (/rooms)
+luceAnalytics.registerCustomEventHandler("load", function (ev) {
+    var eventName = "search";
+    var type = ev.type,
+        url = document.URL,
+        searchRegEx = /https:\/\/www\.riu\.com\/\w{2,}\/rooms/g ,
+        test = searchRegEx.test(url);
+      if (type == "load" && test == true ) {
+        luceAnalytics.logCustomEvent({
+            dim1: url,
+            sig3: eventName,
+        })
+    }
+});
+<!-- The page was last published on 01/02/2022 11:38:11-->

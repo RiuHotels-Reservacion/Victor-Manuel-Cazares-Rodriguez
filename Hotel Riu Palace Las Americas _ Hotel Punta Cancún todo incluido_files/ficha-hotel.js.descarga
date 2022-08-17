@@ -1,0 +1,258 @@
+/*================================================
+=      FICHA-HOTEL.JS - 16/05/2017 - 13:26            =
+================================================*/
+
+$(document).ready(function () {
+
+	var formato = 'DD/MM/YYYY';
+
+	$('#rooms-carousel').carousel({
+	  interval: 9000,
+	});
+	$('#offers-carousel').carousel({
+	  interval: 50000,
+	});
+
+  	$( "#like-hotel-wrap" ).click(function(e){
+      e.preventDefault();
+      var anim = "rubberBand";
+      animate(anim);
+    });
+
+  	$( ".like-hotel" ).click(function() {
+	  	if ( $(this).hasClass( "fa-heart-o" ) ) {
+	    	$(this).addClass('fa-heart');
+		    $(this).removeClass('fa-heart-o');
+	  	} else {
+		    $(this).addClass('fa-heart-o');
+		    $(this).removeClass('fa-heart');
+	  	}
+	});	
+
+
+	$( "#destination .flipper" ).click(function() {
+	  	if ( $(this).hasClass( "flip" ) ) {
+	    	$(this).removeClass('flip');
+	  	} else {
+		    $(this).addClass('flip');
+	  	}
+	});	
+
+	$('#view-details-location').click(function(){
+		$(this).toggleClass('open');
+	});
+
+	$('#close-box-info').click(function(){
+		$('.box-info-hotel-location').toggleClass('open');
+	});
+
+    /*================================================
+    =            Active section on scroll            =
+    ================================================*/
+    
+	$(document).on("scroll", onScroll);
+    
+    //smoothscroll
+    $('#menu-hotel a[href^="#"]').on('click', function (e) {
+        e.preventDefault();
+        $(document).off("scroll");
+        
+        $('a').each(function () {
+            $(this).parent().removeClass('current');
+        })
+        $(this).parent().addClass('current');
+      
+        var target = this.hash,
+            menu = target;
+        $target = $(target);
+        $('html, body').stop().animate({
+            'scrollTop': $target.offset().top+2
+        }, 500, 'swing', function () {
+            window.location.hash = target;
+            $(document).on("scroll", onScroll);
+        });
+    });
+    
+    /*=====  End of Active section on scroll  ======*/
+    
+
+	//var javaScriptVar= 'background-image:url('+ urlMostrar + ');';
+	//$('.header').prop("style", javaScriptVar);
+
+});
+
+$(document).mouseup(function (e) {
+    var container_guests = $(".guest-box");
+    if (!container_guests.is(e.target)
+        && container_guests.has(e.target).length === 0) {
+        container_guests.removeClass('open');
+    }
+});
+
+function onScroll(event){
+    var scrollPos = $(document).scrollTop();
+    $('#menu-hotel a').each(function () {
+        var currLink = $(this);
+        var refElement = $(currLink.attr("href"));
+	if (currLink.parent().hasClass("item-menu") && !currLink.parent().hasClass("ng-hide"))
+	{
+        	if (refElement.position() && refElement.position().top <= scrollPos && refElement.position().top + refElement.height() > scrollPos) {
+	            $('#menu-hotel .menu .item-menu').removeClass("current");
+	            currLink.parent().addClass("current");
+	        }
+	        else{
+	            currLink.parent().removeClass("current");
+	        }
+	}
+    });
+}
+
+/*===================================================
+=            show more descripcion hotel            =
+===================================================*/
+
+$(".show-more a").each(function() {
+    var $link = $(this);
+    var $content = $("div.hotel-description-content");
+
+    console.log($link);
+
+    var visibleHeight = $content[0].clientHeight;
+    var actualHide = $content[0].scrollHeight - 1;
+
+    console.log(actualHide);
+    console.log(visibleHeight);
+
+    if (actualHide > visibleHeight) {
+        $link.show();
+    } else {
+        $link.hide();
+        $content.toggleClass("short-text, full-text");
+    }
+});
+
+$(".show-more a").on("click", function() {
+    var $link = $(this);
+    var $content = $("div.hotel-description-content");
+    //var linkText = $link.text();
+
+    $content.toggleClass("short-text, full-text");
+
+    //$link.text(getShowLinkText(linkText));
+    $link.hide();
+
+    return false;
+});
+
+function getShowLinkText(currentText) {
+    var newText = '';
+
+    if (currentText.toUpperCase() === "SHOW MORE") {
+        newText = "Show less";
+    } else {
+        newText = "Show more";
+    }
+
+    return newText;
+}
+
+/*=====  End of show more descripcion hotel  ======*/
+
+/*=================================
+=            map hotel            =
+=================================*/
+/*
+var markers = [
+    {latLng: [12.565784, -70.048510], name: 'Hotel Riu Palace Aruba', id : "1"},
+    //{latLng: [45.995944, -64.171143], name: "something else", id : "12"}
+];
+
+$(function(){
+  	$('#hotel-map').vectorMap({
+	    map: 'world_mill',
+	    scaleColors: ['#C8EEFF', '#0071A4'],
+	    normalizeFunction: 'polynomial',
+	    zoomOnScroll: false,
+	    zoomMax: 20,
+	    hoverOpacity: 1,
+	    hoverColor: false,
+	    regionsSelectable: false,
+	    regionStyle : {
+	    	initial: {
+			    fill: '#25252b',
+			    "fill-opacity": 1,
+			    stroke: 'none',
+			    "stroke-width": 0,
+			    "stroke-opacity": 1
+		  	},
+		  	hover: {
+		    	"fill-opacity": .7,
+			    cursor: 'default'
+		  	},
+	    },
+	    regionLabelStyle: {
+	    	initial: {
+	    		"fill-opacity": 0
+	    	},
+	    	hover: {
+		    	"fill-opacity": 0,
+		  	},
+	    },
+	    markerStyle: {
+	      	initial: {
+		        fill: '#8A4043',
+		        stroke: '#ca5c5c',
+		        "stroke-width": 2,
+	      	},
+	      	hover: {
+	      		stroke: '#ffffff'
+	      	}
+	    },
+	    //backgroundColor: '#31333e',
+	    backgroundColor: 'transparent',
+	    markers: markers,
+	    onRegionLabelShow: function(e, el, code){
+		    e.preventDefault();
+		},
+	  	onMarkerClick: function(event, index) {
+          	showinfoHotel(markers[index].id);
+          	// alter the weburl
+      	}
+  	});
+});
+
+function showinfoHotel(id) {
+	// alert('La id del hotel seleccionado es '+id);
+	// $('.box-info-hotel-location').addClass('open');
+	if ( $('.box-info-hotel-location').hasClass( "open" ) ) {
+	    $('.box-info-hotel-location').removeClass('open');
+  	} else {
+	    $('.box-info-hotel-location').addClass('open');
+  	}
+
+};
+
+function showAllRooms () {
+	$("#rooms-list").find('.hidden-room').toggleClass('visible');
+}
+*/ 
+
+/*=====  End of map hotel  ======*/
+
+
+/*==========================================
+=            Background video 1            =
+==========================================*/
+
+/*var myPlayer;
+jQuery(function () {
+    myPlayer = jQuery("#bgndVideo").YTPlayer({align:"center,left"});
+});*/
+
+/*=====  End of Background video 1  ======*/
+	
+
+
+
+
+
